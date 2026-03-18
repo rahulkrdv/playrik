@@ -1,0 +1,47 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Watch</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2 style="text-align:center;">▶ Now Playing</h2>
+
+<div class="player">
+  <iframe id="frame" allowfullscreen></iframe>
+</div>
+
+<script src="script.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get("video");
+
+let index = videos.findIndex(v => v.id === id);
+let nextVideo = videos[index + 1];
+
+const frame = document.getElementById("frame");
+
+// Resume time
+let savedTime = localStorage.getItem(id) || 0;
+
+frame.src = `https://www.youtube.com/embed/${id}?start=${savedTime}`;
+
+// Fake progress tracking
+setInterval(() => {
+  savedTime = parseInt(savedTime) + 5;
+  localStorage.setItem(id, savedTime);
+}, 5000);
+
+// Auto next (30 sec demo)
+setTimeout(() => {
+  if (nextVideo) {
+    window.location.href = "watch.html?video=" + nextVideo.id;
+  }
+}, 30000);
+</script>
+
+</body>
+</html>
+```
